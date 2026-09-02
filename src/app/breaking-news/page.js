@@ -1,0 +1,74 @@
+import BreakingNewsPage from '@/views/BreakingNewsPage';
+import connectToDatabase from '@/lib/mongodb';
+import PageSeo from '@/models/PageSeo';
+import BreakingNews from '@/models/BreakingNews';
+
+export async function generateMetadata() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dainiksabsetej.com';
+  const defaultImage = `${siteUrl}/icon-192.png`;
+
+  let title = 'Live Breaking News & Flash Headlines | दैनिक सबसे तेज़';
+  let description = 'Get real-time breaking news, flash alerts, and urgent live headlines in Hindi from India and around the world at दैनिक सबसे तेज़.';
+  let keywords = '';
+  let robots = 'index, follow';
+
+  try {
+    await connectToDatabase();
+    const seo = await PageSeo.findOne({ pageUrl: '/breaking-news' });
+    if (seo && seo.metaTitle) {
+      title = seo.metaTitle;
+      description = seo.metaDescription || description;
+      keywords = seo.metaKeywords || keywords;
+      robots = seo.robots || robots;
+    }
+  } catch (e) {}
+
+  return {
+    title,
+    description,
+    keywords,
+    robots,
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/breaking-news`,
+      siteName: 'दैनिक सबसे तेज़ News',
+      images: [
+        {
+          url: defaultImage,
+          width: 192,
+          height: 192,
+          alt: title,
+        },
+      ],
+      locale: 'hi_IN',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [defaultImage],
+    },
+  };
+}
+
+export const revalidate = 0;
+
+export default async function Page() {
+  let initialNews = [];
+
+  try {
+    await connectToDatabase();
+    const docs = await BreakingNews.find({ isActive: { $ne: false } }).sort({ createdAt: -1 }).limit(50).lean();
+    initialNews = docs.map(doc => ({
+      ...doc,
+      _id: doc._id.toString(),
+      createdAt: doc.createdAt ? doc.createdAt.toString() : null,
+    }));
+  } catch (error) {
+    console.error('Error fetching SSR breaking news:', error);
+  }
+
+  return <BreakingNewsPage initialNews={initialNews} />;
+}

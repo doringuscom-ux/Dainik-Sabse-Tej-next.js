@@ -1,0 +1,161 @@
+import { Noto_Sans_Devanagari, Yatra_One } from "next/font/google";
+import "./globals.css";
+import ClientLayout from "@/components/ClientLayout";
+import { getGlobalSeo } from "@/lib/getGlobalSeo";
+import Script from "next/script";
+
+const notoDevanagari = Noto_Sans_Devanagari({
+  weight: ['400', '500', '600', '700', '900'],
+  subsets: ['devanagari', 'latin'],
+  variable: '--font-noto-devanagari',
+  display: 'swap',
+});
+
+const yatraOne = Yatra_One({
+  weight: ['400'],
+  subsets: ['devanagari', 'latin'],
+  variable: '--font-yatra-one',
+  display: 'swap',
+});
+
+export async function generateMetadata() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dainiksabsetej.com';
+  try {
+    const seo = await getGlobalSeo();
+    if (seo) {
+      return {
+        metadataBase: new URL(siteUrl),
+        alternates: {
+          canonical: './',
+        },
+        title: {
+          template: `%s | ${seo.siteTitle || 'दैनिक सबसे तेज़ News'}`,
+          default: seo.siteTitle || 'दैनिक सबसे तेज़ News',
+        },
+        description: seo.metaDescription || '',
+        keywords: seo.metaKeywords || '',
+        robots: seo.robots || 'index, follow',
+
+        openGraph: {
+          title: seo.siteTitle || 'दैनिक सबसे तेज़ News',
+          description: seo.metaDescription || '',
+          url: siteUrl,
+          siteName: seo.siteTitle || 'दैनिक सबसे तेज़ News',
+          locale: 'hi_IN',
+          type: 'website',
+        },
+        icons: {
+          icon: '/favicon.png',
+        },
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching global SEO for metadata:', error);
+  }
+  
+  return {
+    metadataBase: new URL(siteUrl),
+    alternates: {
+      canonical: './',
+    },
+    title: {
+      template: `%s | दैनिक सबसे तेज़ News`,
+      default: 'दैनिक सबसे तेज़ News',
+    },
+    icons: {
+      icon: '/favicon.png',
+    },
+  };
+}
+
+export default async function RootLayout({ children }) {
+  let googleAnalyticsId = null;
+  let siteTitle = 'दैनिक सबसे तेज़';
+  let metaDescription = 'Latest Hindi News, Breaking News, National, Punjab, Haryana, Sports, and Entertainment updates.';
+  
+  try {
+    const seo = await getGlobalSeo();
+    if (seo) {
+      if (seo.googleAnalyticsId) googleAnalyticsId = seo.googleAnalyticsId;
+      if (seo.siteTitle) siteTitle = seo.siteTitle;
+      if (seo.metaDescription) metaDescription = seo.metaDescription;
+    }
+  } catch (e) {}
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dainiksabsetej.com';
+
+  const organizationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'NewsMediaOrganization',
+    name: 'दैनिक सबसे तेज़',
+    url: siteUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/favicon.png`,
+      width: 512,
+      height: 512
+    },
+    sameAs: [
+      'https://x.com/dainiksabsetej',
+      'https://www.youtube.com/@hbnnews24x7'
+    ]
+  };
+
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: siteTitle,
+    url: siteUrl,
+    description: metaDescription,
+    publisher: {
+      '@type': 'NewsMediaOrganization',
+      name: 'दैनिक सबसे तेज़',
+      url: siteUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/favicon.png`
+      }
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteUrl}/search?q={search_term_string}`
+      },
+      'query-input': 'required name=search_term_string'
+    }
+  };
+
+  return (
+    <html lang="hi" suppressHydrationWarning className={`${notoDevanagari.variable} ${yatraOne.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        <Script async src="https://news.google.com/swg/js/v1/swg-basic.js" strategy="afterInteractive" />
+        <Script id="swg-basic-init" strategy="afterInteractive">
+          {`
+            (self.SWG_BASIC = self.SWG_BASIC || []).push( basicSubscriptions => {
+              basicSubscriptions.init({
+                type: "NewsArticle",
+                isPartOfType: ["Product"],
+                isPartOfProductId: "CAowj_fGDA:openaccess",
+                clientOptions: { theme: "light", lang: "en-GB" },
+              });
+            });
+          `}
+        </Script>
+      </head>
+      <body suppressHydrationWarning className="min-h-screen flex flex-col bg-white">
+        <ClientLayout googleAnalyticsId={googleAnalyticsId}>
+          {children}
+        </ClientLayout>
+      </body>
+    </html>
+  );
+}
