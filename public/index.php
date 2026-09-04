@@ -21,7 +21,7 @@ if (preg_match('/^\/news\/([^\/]+)\/?$/', $requestPath, $matches)) {
     $slug = $matches[1];
 
     // Fetch article data from your backend API
-    $apiUrl = "https://hbn24.onrender.com/api/news/article/" . urlencode($slug);
+    $apiUrl = "https://api.dainiksabsetej.com/api/news/article/" . urlencode($slug);
 
     // Setup cURL
 
