@@ -45,7 +45,7 @@ export async function generateMetadata() {
           type: 'website',
           images: [
             {
-              url: `${siteUrl}/logo.png`,
+              url: `${siteUrl}/og-image.png`,
               width: 1200,
               height: 630,
               alt: seo.siteTitle || 'दैनिक सबसे तेज़ News',
@@ -56,7 +56,7 @@ export async function generateMetadata() {
           card: 'summary_large_image',
           title: seo.siteTitle || 'दैनिक सबसे तेज़ News',
           description: seo.metaDescription || '',
-          images: [`${siteUrl}/logo.png`],
+          images: [`${siteUrl}/og-image.png`],
         },
         icons: {
           icon: '/favicon.png',
@@ -88,7 +88,7 @@ export async function generateMetadata() {
       type: 'website',
       images: [
         {
-          url: `${siteUrl}/logo.png`,
+          url: `${siteUrl}/og-image.png`,
           width: 1200,
           height: 630,
           alt: 'दैनिक सबसे तेज़ News',
@@ -99,7 +99,7 @@ export async function generateMetadata() {
       card: 'summary_large_image',
       title: 'दैनिक सबसे तेज़ News',
       description: 'Latest Hindi News, Breaking News, National, Punjab, Haryana, Sports, and Entertainment updates.',
-      images: [`${siteUrl}/logo.png`],
+      images: [`${siteUrl}/og-image.png`],
     },
   };
 }
