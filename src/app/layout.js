@@ -59,7 +59,14 @@ export async function generateMetadata() {
           images: [`${siteUrl}/og-image.png`],
         },
         icons: {
-          icon: '/favicon.png',
+          icon: [
+            { url: '/favicon.png', type: 'image/png', sizes: '48x48' },
+            { url: '/favicon.png', type: 'image/png', sizes: '96x96' },
+            { url: '/favicon.png', type: 'image/png', sizes: '192x192' },
+            { url: '/favicon.png', type: 'image/png', sizes: '512x512' }
+          ],
+          apple: '/favicon.png',
+          shortcut: '/favicon.png'
         },
       };
     }
@@ -77,7 +84,14 @@ export async function generateMetadata() {
       default: 'दैनिक सबसे तेज़ News',
     },
     icons: {
-      icon: '/favicon.png',
+      icon: [
+        { url: '/favicon.png', type: 'image/png', sizes: '48x48' },
+        { url: '/favicon.png', type: 'image/png', sizes: '96x96' },
+        { url: '/favicon.png', type: 'image/png', sizes: '192x192' },
+        { url: '/favicon.png', type: 'image/png', sizes: '512x512' }
+      ],
+      apple: '/favicon.png',
+      shortcut: '/favicon.png'
     },
     openGraph: {
       title: 'दैनिक सबसे तेज़ News',
