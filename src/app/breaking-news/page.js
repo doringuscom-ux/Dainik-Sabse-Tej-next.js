@@ -5,7 +5,8 @@ import BreakingNews from '@/models/BreakingNews';
 
 export async function generateMetadata() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dainiksabsetej.com';
-  const defaultImage = `${siteUrl}/icon-192.png`;
+  // Use the specific Cloudinary image for breaking news thumbnail
+  const defaultImage = 'https://res.cloudinary.com/dsd6oj52y/image/upload/v1787380341/hbn24_news/pdhg8ghjjd5fy7bdzkgc.jpg';
 
   let title = 'Live Breaking News & Flash Headlines | दैनिक सबसे तेज़';
   let description = 'Get real-time breaking news, flash alerts, and urgent live headlines in Hindi from India and around the world at दैनिक सबसे तेज़.';
@@ -36,8 +37,8 @@ export async function generateMetadata() {
       images: [
         {
           url: defaultImage,
-          width: 192,
-          height: 192,
+          width: 1200,
+          height: 630,
           alt: title,
         },
       ],

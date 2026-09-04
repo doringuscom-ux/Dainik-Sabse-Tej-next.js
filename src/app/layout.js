@@ -43,6 +43,20 @@ export async function generateMetadata() {
           siteName: seo.siteTitle || 'दैनिक सबसे तेज़ News',
           locale: 'hi_IN',
           type: 'website',
+          images: [
+            {
+              url: `${siteUrl}/logo.png`,
+              width: 1200,
+              height: 630,
+              alt: seo.siteTitle || 'दैनिक सबसे तेज़ News',
+            }
+          ],
+        },
+        twitter: {
+          card: 'summary_large_image',
+          title: seo.siteTitle || 'दैनिक सबसे तेज़ News',
+          description: seo.metaDescription || '',
+          images: [`${siteUrl}/logo.png`],
         },
         icons: {
           icon: '/favicon.png',
@@ -64,6 +78,28 @@ export async function generateMetadata() {
     },
     icons: {
       icon: '/favicon.png',
+    },
+    openGraph: {
+      title: 'दैनिक सबसे तेज़ News',
+      description: 'Latest Hindi News, Breaking News, National, Punjab, Haryana, Sports, and Entertainment updates.',
+      url: siteUrl,
+      siteName: 'दैनिक सबसे तेज़ News',
+      locale: 'hi_IN',
+      type: 'website',
+      images: [
+        {
+          url: `${siteUrl}/logo.png`,
+          width: 1200,
+          height: 630,
+          alt: 'दैनिक सबसे तेज़ News',
+        }
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'दैनिक सबसे तेज़ News',
+      description: 'Latest Hindi News, Breaking News, National, Punjab, Haryana, Sports, and Entertainment updates.',
+      images: [`${siteUrl}/logo.png`],
     },
   };
 }
